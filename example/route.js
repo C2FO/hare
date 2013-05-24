@@ -8,7 +8,7 @@
 var cluster = require('cluster'),
     hare = require('../index.js');
 
-
+Error.stackTraceLimit = Infinity;
 if (cluster.isMaster) {
     for (var i = 0; i < 2; i++) {
         cluster.fork();

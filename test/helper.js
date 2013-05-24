@@ -1,15 +1,7 @@
 var Module = require("module");
 var globalRequire = Module.prototype.require,
-    comb = require("comb");
+    _ = require("../lib/extended");
 
-
-function _require(name) {
-    if (name === "amqp") {
-        return AmqpStub();
-    } else {
-        return globalRequire.apply(this, arguments);
-    }
-}
 
 function Stub(proto) {
     var stats = {};
@@ -17,19 +9,19 @@ function Stub(proto) {
     function addCall(name, cb) {
         return function () {
             if (name in stats) {
-                stats[name].push(comb(arguments).toArray());
+                stats[name].push(_(arguments).toArray().value());
             } else {
-                stats[name] = [comb(arguments).toArray()];
+                stats[name] = [_(arguments).toArray().value()];
             }
             return cb.apply(this, arguments);
-        }
+        };
     }
 
     for (var key in proto) {
         proto[key] = addCall(key, proto[key]);
     }
 
-    return comb.merge({
+    return _.merge({
         reset: function reset() {
             stats = {};
         },
@@ -50,12 +42,13 @@ var queueStub;
 var QueueStub = function (name) {
 
     if (!queueStub) {
-        queueStub = Stub({
+        queueStub = new Stub({
 
             bind: function () {
                 return 1;
             },
             subscribe: function () {
+                return _.resolve();
             },
             shift: function () {
             }
@@ -70,15 +63,16 @@ var ExchangeStub = function (name) {
 
     if (!exchangeStub) {
 
-        exchangeStub = Stub({
+        exchangeStub = new Stub({
 
             publish: function () {
+                return _.resolve();
             },
 
             destroy: function () {
             }
 
-        })
+        });
     }
     return exchangeStub;
 };
@@ -88,7 +82,7 @@ var ConnectionStub = function () {
 
     if (!connectionStub) {
 
-        connectionStub = Stub({
+        connectionStub = new Stub({
 
 
             on: function (event, cb) {
@@ -107,20 +101,21 @@ var ConnectionStub = function () {
             },
 
             publish: function () {
+                return _.resolve();
             },
 
             queue: function queue(name, opts, cb) {
                 if ("function" === typeof opts) {
                     cb = opts;
                 }
-                return cb(QueueStub(name));
+                return cb(new QueueStub(name));
             },
 
             exchange: function exchange(name, opts, cb) {
                 if ("function" === typeof opts) {
                     cb = opts;
                 }
-                return cb(ExchangeStub(name));
+                return cb(new ExchangeStub(name));
             }
         });
     }
@@ -129,26 +124,34 @@ var ConnectionStub = function () {
 };
 
 var amqpStub;
-var AmqpStub = function () {
+function AmqpStub() {
     if (!amqpStub) {
-        amqpStub = Stub({
+        amqpStub = new Stub({
             createConnection: function () {
-                return ConnectionStub();
+                return new ConnectionStub();
             }
         });
     }
     return amqpStub;
+}
+
+exports.amqp = new AmqpStub();
+exports.connection = new ConnectionStub();
+exports.queue = new QueueStub();
+exports.exchange = new ExchangeStub();
+exports.reset = function () {
+    new AmqpStub().reset();
+    new ConnectionStub().reset();
+    new QueueStub().reset();
+    new ExchangeStub().reset();
 };
 
-exports.amqp = AmqpStub();
-exports.connection = ConnectionStub();
-exports.queue = QueueStub();
-exports.exchange = ExchangeStub();
-exports.reset = function () {
-    AmqpStub().reset();
-    ConnectionStub().reset();
-    QueueStub().reset();
-    ExchangeStub().reset();
+function _require(name) {
+    if (name === "amqp") {
+        return new AmqpStub();
+    } else {
+        return globalRequire.apply(this, arguments);
+    }
 }
 
 Module.prototype.require = _require;
