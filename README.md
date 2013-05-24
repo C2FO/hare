@@ -1,15 +1,17 @@
-#Hare
+[![Build Status](https://travis-ci.org/C2FO/hare.png)](https://travis-ci.org/C2FO/hare)
+
+# Hare
 
 Hare is a wrapper around [amqp](https://github.com/postwait/node-amqp) providing a cleaner chainable API for some of the common patterns.
 
-##Installation
+## Installation
 
 ```
 npm install hare
 ```
 
 
-##Connecting
+## Connecting
 
 To connect to your `amqp` server you can pass in your options to `hare`
 
@@ -27,7 +29,19 @@ var myHare = hare();
 
 ```
 
-##WorkerQueues
+### Heartbeat
+
+You may also specify a heartbeat ([See here](http://www.rabbitmq.com/reliability.html))
+
+```
+hare({url : "amqp://guest:guest@localhost:5672", heartbeat: 2});
+
+//or
+
+hare({url : "amqp://guest:guest@localhost:5672"}).heartbeat(2);
+```
+
+## WorkerQueues
 
 Worker queues allow you to ditribute messages to workers, where only one worker will recieve the message. Allowing for the distribution of resource intensive tasks across a worker pool.
 
@@ -52,7 +66,7 @@ myHare.workerQueue("my.queue").subscribe(function(message, done){
 
 To read more about worker queues click [here](http://www.rabbitmq.com/tutorials/tutorial-two-python.html)
 
-##Publish/Subscribe
+## Publish/Subscribe
 
 Publish and Subscribe allows you to broadcast messages to multiple consumers at a time.
 
@@ -76,7 +90,7 @@ myHare.pubSub("my-exchange").subscribe(function (event) {
 
 To read more about publishing and subscribing click [here](http://www.rabbitmq.com/tutorials/tutorial-two-python.html)
 
-##Routing
+## Routing
 
 
 Routing is similar to `pubSub` except that subscribers can listen to a subset of messages. 
@@ -106,7 +120,7 @@ hare().route("direct_logs", "debug").subscribe(function (event) {
 
 To read more about routing click [here](http://www.rabbitmq.com/tutorials/tutorial-four-python.html)
 
-##Topics
+## Topics
 
 Topics is similar to routing except that it allows you to subscribe to messages on multiple criteria.
 
@@ -144,7 +158,7 @@ myHare.topic("topic_logs", "log.info").subscribe(function(message){
 
 To read more about topics click [here](http://www.rabbitmq.com/tutorials/tutorial-five-python.html)
 
-##Creating your own Queue
+## Creating your own Queue
 
 You may also use the `queue` method to create your own queue if the above patterns do not match your needs.
 
@@ -174,7 +188,7 @@ To customize the queue even further you may specify the following options using 
  
 To read more about the queue options click [here](https://github.com/postwait/node-amqp#queue)
 
-##Creating Exchanges
+## Creating Exchanges
 
 You may also use the `exchange` method to work with your own exchange.
 
@@ -198,7 +212,7 @@ To customize the exchange even further you may specify the following options usi
 
 To read more about the queue options click [here](https://github.com/postwait/node-amqp#exchange)
 
-##Logging
+## Logging
 
 `Hare` comes with a logger which is useful for debugging. By default logging is turned off. 
 
@@ -222,7 +236,7 @@ Or to set the level
 hare.logLevel("error");
 ```
 
-##Configuring Defaults
+## Configuring Defaults
 
 You can configure defaults for all queues using the `queueOptions` options.
 
@@ -230,12 +244,12 @@ You can configure defaults for all queues using the `queueOptions` options.
 hare.queueOptions({durable : true, passive : false, autoDelete : false});
 ```
 
-##License
+## License
 
 
 MIT <https://github.com/c2fo/hare/raw/master/LICENSE>
 
-##Meta
+## Meta
 
 * Code: `git clone git://github.com/c2fo/hare.git`
 * Website:  <http://c2fo.com> - Twitter: <http://twitter.com/c2fo> - 877.465.4045
