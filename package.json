@@ -1,6 +1,6 @@
 {
     "name": "hare",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "description": "Wrapper around amqp to make common patterns easier",
     "main": "index.js",
     "scripts": {
