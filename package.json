@@ -1,6 +1,6 @@
 {
     "name": "hare",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Wrapper around amqp to make common patterns easier",
     "main": "index.js",
     "scripts": {
@@ -14,7 +14,7 @@
     "license": "MIT",
     "dependencies": {
         "amqp": "~0.2.0",
-        "comb": "~0.2.3"
+        "comb": "~0.3.0"
     },
     "devDependencies": {
         "grunt": "~0.4.1",
