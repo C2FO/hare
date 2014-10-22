@@ -57,7 +57,7 @@ queue.publish({hello : "world"});
 To create a worker subscribe to the worker queue.
 
 ```javascript
-myHare.workerQueue("my.queue").subscribe(function(message, done){
+myHare.workerQueue("my.queue").subscribe(function(message, headers, deliveryInfo, done){
 	console.log(message);
 	//call done to ack the message	
 	done();
@@ -157,6 +157,62 @@ myHare.topic("topic_logs", "log.info").subscribe(function(message){
 ```
 
 To read more about topics click [here](http://www.rabbitmq.com/tutorials/tutorial-five-python.html)
+
+## Rpc
+
+Using the `rpc()` provides a basic rpc mechanism that can be used for request response style messaging.
+
+To create an rpc queue use the rpc method.
+
+```javascript
+
+var rpcQueue = hare().rpc("my_queue");
+```
+
+In the server you can provide a `handle` function which responds to messages.
+
+```javascript
+
+rpcQueue.handle(function(msg){
+    return "hello " + msg.name;
+});
+
+```
+
+If your handler is async you can either return a promise.
+
+```javascript
+
+rpcQueue.handle(function(msg){
+    return new Promise().callback("hello " + msg.name).promise();
+});
+```
+
+or invoke the `done` callback
+
+```javascript
+rpcQueue.handle(function(msg, done){
+    return done(null, "hello " + msg.name);
+});
+```
+
+In the client you just invoke the call method which sends a message.
+
+The call method returns a promise.
+
+```javascript
+rpcQueue.call({name: "Bob"}).chain(function(res){
+    console.log(res); //"hello Bob"
+});
+```
+
+Or you can provide a callback
+
+```javascript
+rpcQueue.call({name: "Bob"}, function(err, res){
+    console.log(res); //"hello Bob"
+});
+```
 
 ## Creating your own Queue
 

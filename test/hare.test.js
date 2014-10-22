@@ -1,3 +1,4 @@
+"use strict"
 var it = require("it"),
     helper = require("./helper"),
     assert = require("assert"),
@@ -5,10 +6,9 @@ var it = require("it"),
 
 var amqp = helper.amqp,
     queue = helper.queue,
-    connection = helper.connection,
-    exchange = helper.exchange;
+    connection = helper.connection;
 
-it.describe("hare",function (it) {
+it.describe("hare", function (it) {
 
     it.beforeEach(function () {
         helper.reset();
@@ -54,66 +54,139 @@ it.describe("hare",function (it) {
         assert.equal(amqp.getCallCount("createConnection"), 1);
     });
 
-    it.should("allow the creation of a queue", function () {
-        return hare().queue().subscribe().chain(function () {
-            assert.equal(connection.getCallCount("queue"), 1);
-            assert.isTrue(connection.calledWith("queue", ["", {exchange: "amq.direct", ack: true}, function () {
-            }]));
-            assert.equal(queue.getCallCount("subscribe"), 1);
-            assert.equal(queue.getCallCount("bind"), 1);
-            assert.isTrue(queue.calledWith("bind", ["amq.direct", undefined]));
+    it.describe(".queue", function (it) {
+        it.should("allow the creation of a queue", function () {
+            return hare().queue().subscribe(function () {
+            }).chain(function () {
+                assert.equal(connection.getCallCount("queue"), 1);
+                assert.isTrue(connection.calledWith("queue", ["", {exchange: "amq.direct", ack: true}, function () {
+                }]));
+                assert.equal(queue.getCallCount("subscribe"), 1);
+                assert.equal(queue.getCallCount("bind"), 1);
+                assert.isTrue(queue.calledWith("bind", ["amq.direct", undefined]));
+            });
         });
     });
 
-    it.should("allow the creation of a workerQueue", function () {
-        return hare().workerQueue().subscribe().chain(function () {
-            assert.equal(connection.getCallCount("queue"), 1);
-            assert.equal(queue.getCallCount("subscribe"), 1);
-            assert.equal(queue.getCallCount("bind"), 1);
-            assert.isTrue(queue.calledWith("bind", ["amq.direct", undefined]));
+    it.describe(".workerQueue", function (it) {
+
+        it.should("allow the creation of a workerQueue", function () {
+            return hare().workerQueue().subscribe(function () {
+            }).chain(function () {
+                assert.equal(connection.getCallCount("queue"), 1);
+                assert.equal(queue.getCallCount("subscribe"), 1);
+                assert.equal(queue.getCallCount("bind"), 1);
+                assert.isTrue(queue.calledWith("bind", ["amq.direct", undefined]));
+            });
         });
     });
 
-    it.should("allow the creation of a pubSub", function () {
-        return hare().pubSub("my.exchange").subscribe().chain(function () {
-            assert.equal(connection.getCallCount("exchange"), 1);
-            assert.isTrue(connection.calledWith("exchange", ["my.exchange", {type: "fanout"}, function () {
-            }]));
-            assert.equal(connection.getCallCount("queue"), 1);
-            assert.isTrue(connection.calledWith("queue", ["", {exchange: "my.exchange", exclusive: true}, function () {
-            }]));
-            assert.equal(queue.getCallCount("subscribe"), 1);
-            assert.equal(queue.getCallCount("bind"), 1);
-            assert.isTrue(queue.calledWith("bind", ["my.exchange", undefined]));
+    it.describe(".pubSub", function (it) {
+
+        it.should("allow the creation of a pubSub", function () {
+            return hare().pubSub("my.exchange").subscribe(function () {
+            }).chain(function () {
+                assert.equal(connection.getCallCount("exchange"), 1);
+                assert.isTrue(connection.calledWith("exchange", ["my.exchange", {type: "fanout"}, function () {
+                }]));
+                assert.equal(connection.getCallCount("queue"), 1);
+                assert.isTrue(connection.calledWith("queue", ["", {
+                    exchange: "my.exchange",
+                    exclusive: true
+                }, function () {
+                }]));
+                assert.equal(queue.getCallCount("subscribe"), 1);
+                assert.equal(queue.getCallCount("bind"), 1);
+                assert.isTrue(queue.calledWith("bind", ["my.exchange", undefined]));
+            });
         });
+
     });
 
-    it.should("allow the creation of a topic", function () {
-        return hare().topic("my.exchange", "hello").subscribe().chain(function () {
-            assert.equal(connection.getCallCount("exchange"), 1);
-            assert.isTrue(connection.calledWith("exchange", ["my.exchange", {type: "topic"}, function () {
-            }]));
-            assert.equal(connection.getCallCount("queue"), 1);
-            assert.isTrue(connection.calledWith("queue", ["", {exchange: "my.exchange", exclusive: true, routingKey: "hello"}, function () {
-            }]));
-            assert.equal(queue.getCallCount("subscribe"), 1);
-            assert.equal(queue.getCallCount("bind"), 1);
-            assert.isTrue(queue.calledWith("bind", ["my.exchange", "hello"]));
+    it.describe(".topic", function (it) {
+
+        it.should("allow the creation of a topic", function () {
+            return hare().topic("my.exchange", "hello").subscribe(function () {
+            }).chain(function () {
+                assert.equal(connection.getCallCount("exchange"), 1);
+                assert.isTrue(connection.calledWith("exchange", ["my.exchange", {type: "topic"}, function () {
+                }]));
+                assert.equal(connection.getCallCount("queue"), 1);
+                assert.isTrue(connection.calledWith("queue", ["", {
+                    exchange: "my.exchange",
+                    exclusive: true,
+                    routingKey: "hello"
+                }, function () {
+                }]));
+                assert.equal(queue.getCallCount("subscribe"), 1);
+                assert.equal(queue.getCallCount("bind"), 1);
+                assert.isTrue(queue.calledWith("bind", ["my.exchange", "hello"]));
+            });
         });
+
     });
 
-    it.should("allow the creation of a route", function () {
-        return hare().route("my.exchange", "hello").subscribe().chain(function () {
-            assert.equal(connection.getCallCount("exchange"), 1);
-            assert.isTrue(connection.calledWith("exchange", ["my.exchange", {type: "direct"}, function () {
-            }]));
-            assert.equal(connection.getCallCount("queue"), 1);
-            assert.isTrue(connection.calledWith("queue", ["", {exchange: "my.exchange", exclusive: true, routingKey: "hello"}, function () {
-            }]));
-            assert.equal(queue.getCallCount("subscribe"), 1);
-            assert.equal(queue.getCallCount("bind"), 1);
-            assert.isTrue(queue.calledWith("bind", ["my.exchange", "hello"]));
+    it.describe(".route", function (it) {
+
+        it.should("allow the creation of a route", function () {
+            return hare().route("my.exchange", "hello").subscribe(function () {
+            }).chain(function () {
+                assert.equal(connection.getCallCount("exchange"), 1);
+                assert.isTrue(connection.calledWith("exchange", ["my.exchange", {type: "direct"}, function () {
+                }]));
+                assert.equal(connection.getCallCount("queue"), 1);
+                assert.isTrue(connection.calledWith("queue", ["", {
+                    exchange: "my.exchange",
+                    exclusive: true,
+                    routingKey: "hello"
+                }, function () {
+                }]));
+                assert.equal(queue.getCallCount("subscribe"), 1);
+                assert.equal(queue.getCallCount("bind"), 1);
+                assert.isTrue(queue.calledWith("bind", ["my.exchange", "hello"]));
+            });
         });
+
     });
 
-}).as(module).run();
+    it.describe(".rpc", function (it) {
+
+        it.should("allow the creation of an rpc client", function () {
+            return hare().rpc("rpc_queue").handle(function () {
+            }).chain(function () {
+                assert.equal(connection.getCallCount("queue"), 1);
+                assert.isTrue(connection.calledWith("queue", ["rpc_queue", {
+                    exchange: "amq.direct",
+                    ack: true,
+                    prefetchCount: 1
+                }, function () {
+                }]));
+                assert.equal(queue.getCallCount("subscribe"), 1);
+                assert.equal(queue.getCallCount("bind"), 1);
+                assert.isTrue(queue.calledWith("bind", ["amq.direct", undefined]));
+            });
+        });
+
+
+        it.should("allow the creation of an rpc with an exchange", function () {
+            return hare().rpc("my.exchange", "hello").handle(function () {
+            }).chain(function () {
+                assert.equal(connection.getCallCount("exchange"), 1);
+                assert.isTrue(connection.calledWith("exchange", ["my.exchange", {type: "direct"}, function () {
+                }]));
+                assert.equal(connection.getCallCount("queue"), 1);
+                assert.isTrue(connection.calledWith("queue", ["hello", {
+                    exchange: "my.exchange",
+                    ack: true,
+                    prefetchCount: 1
+                }, function () {
+                }]));
+                assert.equal(queue.getCallCount("subscribe"), 1);
+                assert.equal(queue.getCallCount("bind"), 1);
+                assert.isTrue(queue.calledWith("bind", ["my.exchange", undefined]));
+            });
+        });
+
+    });
+
+});

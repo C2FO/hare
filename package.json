@@ -1,7 +1,28 @@
 {
     "name": "hare",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "Wrapper around amqp to make common patterns easier",
+    "keywords": [
+        "amqp",
+        "rabbit",
+        "rabbitmq",
+        "rpc",
+        "workerQueue",
+        "worker queue",
+        "worker",
+        "pubsub",
+        "pub-sub",
+        "pub",
+        "sub",
+        "routing",
+        "route",
+        "topic",
+        "topics",
+        "exchange",
+        "excahanges",
+        "queue",
+        "queues"
+    ],
     "main": "index.js",
     "scripts": {
         "test": "it -r dot"
@@ -14,7 +35,8 @@
     "license": "MIT",
     "dependencies": {
         "amqp": "~0.2.0",
-        "comb": "~0.3.0"
+        "comb": "~0.3.0",
+        "node-uuid": "^1.4.1"
     },
     "devDependencies": {
         "grunt": "~0.4.1",
