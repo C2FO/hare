@@ -1,6 +1,6 @@
 {
     "name": "hare",
-    "version": "0.4.0",
+    "version": "1.0.0",
     "description": "Wrapper around amqp to make common patterns easier",
     "keywords": [
         "amqp",
@@ -35,13 +35,16 @@
     "license": "MIT",
     "dependencies": {
         "amqp": "~0.2.0",
-        "comb": "git://github.com/C2FO/comb.git#node-5",
+        "comb": "git://github.com/C2FO/comb.git#node-5-merge",
         "node-uuid": "^1.4.1"
     },
     "devDependencies": {
         "grunt": "~0.4.1",
-        "it": "~0.2.6",
-        "grunt-it": "~0.3.1",
+        "it": "^1.0.1",
+        "grunt-it": "^1.0.0",
         "grunt-contrib-jshint": "~0.5.4"
+    },
+    "engines": {
+        "node": ">= 4.0.0"
     }
 }
