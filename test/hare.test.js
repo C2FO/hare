@@ -36,7 +36,7 @@ it.describe("hare", function (it) {
         assert.deepEqual(hare.CONNECTION_OPTIONS, {url: "amqp://test"});
     });
 
-    it.should("support setting connection options", function () {
+    it.should("support setting queue options", function () {
         hare.queueOptions({passive: true}).queueOptions({durable: false});
         assert.deepEqual(hare.SUBSCRIBE_OPTIONS, {passive: true, durable: false});
         hare.SUBSCRIBE_OPTIONS = {};
