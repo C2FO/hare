@@ -35,7 +35,7 @@
     "license": "MIT",
     "dependencies": {
         "amqp": "~0.2.0",
-        "comb": "git://github.com/C2FO/comb.git#node-5-merge",
+        "comb": "~1.0.0",
         "node-uuid": "^1.4.1"
     },
     "devDependencies": {
