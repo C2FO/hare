@@ -1,6 +1,6 @@
 {
   "name": "hare",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrapper around amqp to make common patterns easier",
   "keywords": [
     "amqp",
@@ -36,7 +36,7 @@
   "dependencies": {
     "amqp": "~0.2.0",
     "comb": "~1.0.0",
-    "uuid": "^3.0.0"
+    "uuid": "~3.0.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
