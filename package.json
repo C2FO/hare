@@ -1,50 +1,50 @@
 {
-    "name": "hare",
-    "version": "1.0.0",
-    "description": "Wrapper around amqp to make common patterns easier",
-    "keywords": [
-        "amqp",
-        "rabbit",
-        "rabbitmq",
-        "rpc",
-        "workerQueue",
-        "worker queue",
-        "worker",
-        "pubsub",
-        "pub-sub",
-        "pub",
-        "sub",
-        "routing",
-        "route",
-        "topic",
-        "topics",
-        "exchange",
-        "excahanges",
-        "queue",
-        "queues"
-    ],
-    "main": "index.js",
-    "scripts": {
-        "test": "it -r dot"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:C2FO/hare.git"
-    },
-    "author": "Doug Martin",
-    "license": "MIT",
-    "dependencies": {
-        "amqp": "~0.2.0",
-        "comb": "~1.0.0",
-        "node-uuid": "^1.4.1"
-    },
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "it": "^1.0.1",
-        "grunt-it": "^1.0.0",
-        "grunt-contrib-jshint": "~0.5.4"
-    },
-    "engines": {
-        "node": ">= 4.0.0"
-    }
+  "name": "hare",
+  "version": "1.0.0",
+  "description": "Wrapper around amqp to make common patterns easier",
+  "keywords": [
+    "amqp",
+    "rabbit",
+    "rabbitmq",
+    "rpc",
+    "workerQueue",
+    "worker queue",
+    "worker",
+    "pubsub",
+    "pub-sub",
+    "pub",
+    "sub",
+    "routing",
+    "route",
+    "topic",
+    "topics",
+    "exchange",
+    "excahanges",
+    "queue",
+    "queues"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "it -r dot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:C2FO/hare.git"
+  },
+  "author": "Doug Martin",
+  "license": "MIT",
+  "dependencies": {
+    "amqp": "~0.2.0",
+    "comb": "~1.0.0",
+    "uuid": "^3.0.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "it": "^1.0.1",
+    "grunt-it": "^1.0.0",
+    "grunt-contrib-jshint": "~0.5.4"
+  },
+  "engines": {
+    "node": ">= 4.0.0"
+  }
 }
