@@ -35,7 +35,7 @@
   "license": "MIT",
   "dependencies": {
     "amqp": "~0.2.0",
-    "comb": "~1.0.0",
+    "comb": "~1.2.0",
     "uuid": "~3.0.0"
   },
   "devDependencies": {
