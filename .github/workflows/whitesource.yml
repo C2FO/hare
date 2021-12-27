@@ -1,8 +1,8 @@
 name: NPM WhiteSource Scan
 
 on:
-  push:
-    branches: [ hare-sample* ]
+  pull_request:
+    branches: [ master* ]
 
 jobs:
   WhiteSource-Unified-Agent:
