@@ -36,7 +36,7 @@
   "dependencies": {
     "amqp": "~0.2.0",
     "comb": "~1.0.0",
-    "uuid": "~3.0.0"
+    "uuid": "~3.4.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
