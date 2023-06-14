@@ -152,7 +152,8 @@ it.describe("hare", function (it) {
     it.describe(".rpc", function (it) {
 
         it.should("allow the creation of an rpc client", function () {
-            return hare().rpc("rpc_queue").handle(function () {
+            var rpc = hare().rpc("rpc_queue")
+            return rpc.handle(function () {
             }).chain(function () {
                 assert.equal(connection.getCallCount("queue"), 1);
                 assert.isTrue(connection.calledWith("queue", ["rpc_queue", {
@@ -164,6 +165,10 @@ it.describe("hare", function (it) {
                 assert.equal(queue.getCallCount("subscribe"), 1);
                 assert.equal(queue.getCallCount("bind"), 1);
                 assert.isTrue(queue.calledWith("bind", ["amq.direct", undefined]));
+                // the queue for replies should have the rpc queue name and a uuid for uniqueness
+                // e.g. rpc_queue-rpc-reply-DE13492E-337F-454C-8BA6-CFD18ED99E09
+                assert.isTrue(rpc.recieveQueue.queueName.startsWith("rpc_queue-rpc-reply-"));
+                assert.equal(rpc.recieveQueue.queueName.length, 56);
             });
         });
 

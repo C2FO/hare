@@ -1,6 +1,6 @@
 {
   "name": "hare",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Wrapper around amqp to make common patterns easier",
   "keywords": [
     "amqp",
